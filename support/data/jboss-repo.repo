@@ -1,0 +1,4 @@
+[jboss-repo]
+name:jboss eap repository
+baseurl:file:///
+gpgcheck=0
