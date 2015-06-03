@@ -28,7 +28,7 @@ On the host machine download this project and then build the rpm and create the 
 [source,bash]
 ----
 $ cd /<project-home>/ansible-puppet-workship
-$ ln -s installs/jboss-eap-6.4.0.GA.zip support/rpmbuild/SOURCES
+$ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 ----
 
 . Build RPM
