@@ -27,7 +27,7 @@ On the host machine download this project and then build the rpm and create the 
 
 [source,bash]
 ----
-$ cd /<project-home>/ansible-puppet-workship
+$ cd /<project-home>/ansible-puppet-workshop
 $ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 ----
 
@@ -38,7 +38,39 @@ $ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 $ rpmbuild --define "_topdir ${PWD}/support/rpmbuild" -ba -v ./support/rpmbuild/SPECS/jboss-eap-6.4.spec
 ----
 
+. Copy rpm to data directory
+[source, bash]
+----
+$ cp ./support/rpmbuild/RPMS/x86_64/jboss-eap-6.4-1.0-1.el7.x86_64.rpm ./support/myrepo
+----
+
+.Create repository file
+[source, bash]
+----
+$ mkdir hw
+$ cd hw
+$ cat > ./support/myrepo/jboss-repo.repo << EOF
+> name: jboss eap repository
+> baseurl: file:///{project-home}/ansible-puppet-workshop/support/myrepo/  
+> gpgcheck=0
+> EOF
+----
+
+.Create myrepo RPM database
+[source, bash]
+----
+$ createrepo --database ./support/myrepo
+----
+
+
+
+
+
 .Create yum repository
+----
+$ createrepo 
+----
+
 
 == Ansible
 
