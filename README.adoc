@@ -40,7 +40,7 @@ $ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 
 [source, bash]
 ----
-$ rpmbuild --define "_topdir ${PWD}/support/rpmbuild" -ba -v ./support/rpmbuild/SPECS/jboss-eap-6.4.spec
+$ rpmbuild --define "_topdir ${PWD}/support/rpmbuild" -ba ./support/rpmbuild/SPECS/jboss-eap-6.4.spec
 ----
 
 . Copy rpm to data directory
