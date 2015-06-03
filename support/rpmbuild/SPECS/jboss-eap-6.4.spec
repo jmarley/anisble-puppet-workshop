@@ -7,13 +7,14 @@ Group: System Environment/Base
 License: GPLv2+       
 URL: http://www.irs.gov 
          
-Source0: jboss-eap-6.4.0.tar.gz       
+Source0: jboss-eap-6.4.zip       
 
 # jboss home variable
 %define jboss_version jboss-eap-6.4
 %define jboss_home /opt/jboss/%{jboss_version}
 
 Requires: java-1.7.0-openjdk
+Requires: unzip
 
 %description
 This rpm takes the EAP package from Red Hat in zip format and packages into an 
@@ -21,7 +22,8 @@ rpm which is then installed in locations defined in spec.
 
 
 %prep
-%setup -q -c 
+             	
+unzip %SOURCE0
 
 %build
 #Not in use

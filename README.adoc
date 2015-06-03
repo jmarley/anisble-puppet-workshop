@@ -15,14 +15,34 @@ I have a custom rpm that I want installed, but the rpm needs individual configur
 . Use configuration management tool to install and configure EAP
 
 == The  RPM
+On the host machine download this project and then build the rpm and create the repository. We will then use this to push to the remote server for installation.
 
-.Download EAP
+. Download project
 
-.Build RPM
+. https://www.jboss.org/download-manager/file/jboss-eap-6.4.0.GA.zip[Download EAP]
+
+. Add product to installs directory
+
+. Create link to installs directory
+
+[source,bash]
+----
+$ cd /<project-home>/ansible-puppet-workship
+$ ln -s installs/jboss-eap-6.4.0.GA.zip support/rpmbuild/SOURCES
+----
+
+. Build RPM
+
+[source, bash]
+----
+$ rpmbuild --define "_topdir ${PWD}/support/rpmbuild" -ba -v ./support/rpmbuild/SPECS/jboss-eap-6.4.spec
+----
 
 .Create yum repository
 
 == Ansible
+
+
 
 == Puppet
 
