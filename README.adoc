@@ -1,4 +1,7 @@
 = Ansible and Puppet workshop
+:icons: font
+:source-highlighter: pygments
+:imagesdir: support/data
 
 Basically, I want to show case a simple comparison between the two tools for installing an existing rpm and configuring it. My intuition is that they will function very similarily and with similar difficulties setting up.
 
@@ -9,10 +12,12 @@ I have a custom rpm that I want installed, but the rpm needs individual configur
 
 ''''
 
+
 .What we're going to do
-. Build a custom RPM for EAP installation
-. Configure Java Vault a configuration file for EAP
+. Build a custom RPM and repository for EAP installation
 . Use configuration management tool to install and configure EAP
+
+image::ansible-puppet-workshop.png[title="configuration management workflow"]
 
 == The  RPM
 On the host machine download this project and then build the rpm and create the repository. We will then use this to push to the remote server for installation.
@@ -61,16 +66,6 @@ $ cat > ./support/myrepo/jboss-repo.repo << EOF
 ----
 $ createrepo --database ./support/myrepo
 ----
-
-
-
-
-
-.Create yum repository
-----
-$ createrepo 
-----
-
 
 == Ansible
 
