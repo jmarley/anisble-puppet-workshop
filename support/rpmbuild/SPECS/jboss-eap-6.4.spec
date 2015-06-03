@@ -7,7 +7,7 @@ Group: System Environment/Base
 License: GPLv2+       
 URL: http://www.irs.gov 
          
-Source0: jboss-eap-6.4.zip       
+Source0: jboss-eap-6.4.0.zip       
 
 # jboss home variable
 %define jboss_version jboss-eap-6.4
@@ -52,14 +52,6 @@ cp -r ./%{jboss_version} $RPM_BUILD_ROOT/opt/jboss
 # Make log and data dir's
 install -d -m 2750 $RPM_BUILD_ROOT%{jboss_home}/standalone/log
 install -d -m 2750 $RPM_BUILD_ROOT%{jboss_home}/standalone/data
-
-# Add Microsoft Data Source (can customize more)
-cp -r ./mymodules $RPM_BUILD_ROOT/opt/jboss/mymodules
-
-# security
-# Add Vault to EAP
-cp -r ./keystores/vault.keystore $RPM_BUILD_ROOT/opt/jboss/vault
-cp -r ./keystores/VAULT.dat $RPM_BUILD_ROOT/opt/jboss/vault
 
 %clean
 rm -rf $RPM_BUILD_ROOT
