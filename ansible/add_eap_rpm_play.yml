@@ -1,0 +1,6 @@
+---
+- hosts: minion01.rhel7.labs
+  remote_user: redhatter
+  tasks:
+  - name: Copy JBoss EAP RPM and repository folder
+    copy: src=/mnt/ansible-puppet-workshop/support/myrepo dest=/var/tmp/

@@ -1,0 +1,6 @@
+---
+- hosts: minion01.rhel7.labs
+  remote_user: redhatter
+  tasks:
+  - name: remove JBoss EAP RPM and repository folder
+    command: /bin/rm -r /var/tmp/myrepo
