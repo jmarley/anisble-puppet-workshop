@@ -13,3 +13,5 @@
     command: /usr/bin/createrepo --database /opt/myrepo 
   - name: Add JBoss EAP repository to yum
     command: /usr/bin/yum-config-manager --add-repo /opt/myrepo/jboss-repo.repo --enable 
+  - name: Install JBoss EAP
+    yum: name=jboss-eap-6.4 state=present

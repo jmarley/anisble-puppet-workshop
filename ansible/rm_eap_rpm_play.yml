@@ -3,6 +3,8 @@
   remote_user: redhatter
   sudo: yes
   tasks:
+  - name: Uninstall JBoss EAP RPM
+    yum: name=jboss-eap-6.4 state=absent
   - name: remove JBoss EAP RPM and repository folder
     command: /bin/rm -r /opt/myrepo
   - name: disable JBoss EAP repository

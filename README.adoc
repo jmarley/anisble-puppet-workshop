@@ -36,6 +36,7 @@ $ cd /<project-home>/ansible-puppet-workshop
 $ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 ----
 
+[start=5]
 . Build RPM
 
 [source, bash]
@@ -43,20 +44,19 @@ $ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 $ rpmbuild --define "_topdir ${PWD}/support/rpmbuild" -ba ./support/rpmbuild/SPECS/jboss-eap-6.4.spec
 ----
 
-. Copy rpm to data directory
+[start=6]
+. Move rpm to data directory
 [source, bash]
 ----
-$ cp ./support/rpmbuild/RPMS/x86_64/jboss-eap-6.4-1.0-1.el7.x86_64.rpm ./support/myrepo
+$ mv ./support/rpmbuild/RPMS/x86_64/jboss-eap-6.4-1.0-1.el7.x86_64.rpm ./support/myrepo
 ----
 
 .Create repository file
 [source, bash]
 ----
-$ mkdir hw
-$ cd hw
 $ cat > ./support/myrepo/jboss-repo.repo << EOF
 > name: jboss eap repository
-> baseurl: file:///{project-home}/ansible-puppet-workshop/support/myrepo/  
+> baseurl: file:///opt/myrepo/  
 > gpgcheck=0
 > EOF
 ----
@@ -69,7 +69,25 @@ $ createrepo --database ./support/myrepo
 
 == Ansible
 
+.run ansible file
 
+[source,bash]
+----
+$ ansible -i hosts add_eap_rpm_play.yml
+----
+
+.verify anisble ran correctly
+
+[source,bash]
+----
+$ 
+----
+
+.remove ansible configurations
+[source,bash]
+----
+$ ansible -i hosts rm_eap_rpm_play.yml
+----
 
 == Puppet
 
