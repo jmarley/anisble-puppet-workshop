@@ -1,6 +1,12 @@
 ---
 - hosts: minion01.rhel7.labs
   remote_user: redhatter
+  sudo: yes
   tasks:
   - name: remove JBoss EAP RPM and repository folder
-    command: /bin/rm -r /var/tmp/myrepo
+    command: /bin/rm -r /opt/myrepo
+  - name: disable JBoss EAP repository
+    command: /usr/bin/yum-config-manager --disablerepo=jboss-repo
+  - name: remove repository file
+    command: /bin/rm /etc/yum.repos.d/jboss-repo.repo
+
