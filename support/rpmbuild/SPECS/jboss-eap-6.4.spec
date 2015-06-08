@@ -41,12 +41,12 @@ install -d -m 0755 $RPM_BUILD_ROOT/opt/jboss/vault
 # Create EAP directory
 install -d -m 0755 $RPM_BUILD_ROOT/opt/jboss
 
-# Add EAP to package
-cp -r ./%{jboss_version} $RPM_BUILD_ROOT/opt/jboss
-
 # Add EAP systemctl service file
 
 cp %SOURCE1 ./%{jboss_version}/bin/init.d
+
+# Add EAP to package
+cp -r ./%{jboss_version} $RPM_BUILD_ROOT/opt/jboss
 
 # Make log and data dir's
 install -d -m 2750 $RPM_BUILD_ROOT%{jboss_home}/standalone/log
