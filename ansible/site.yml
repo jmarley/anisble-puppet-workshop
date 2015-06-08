@@ -1,9 +1,0 @@
----
-
-# playbook for installing jboss eap rpm and configuring vault.
-
-- hosts: minion01.rhel7.labs
-  user: root
-
-  roles:
-    - install-jboss-eap 
