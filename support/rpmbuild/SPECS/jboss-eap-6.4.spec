@@ -8,6 +8,7 @@ License: GPLv2+
 URL: http://www.irs.gov 
          
 Source0: jboss-eap-6.4.0.zip       
+Source1: jbosseap6.service       
 
 # jboss home variable
 %define jboss_version jboss-eap-6.4
@@ -31,14 +32,8 @@ unzip %SOURCE0
 %install
 rm -rf $RPM_BUILD_ROOT
 
-# Create initd Start/Stop directory 
-install -d $RPM_BUILD_ROOT/etc/jboss-as
-
 # Create log directory
 install -d $RPM_BUILD_ROOT/var/log/jboss-as
-
-# Create run directory
-install -d $RPM_BUILD_ROOT/var/run/jboss-as
 
 # Create SSL directory
 install -d -m 0755 $RPM_BUILD_ROOT/opt/jboss/vault 
@@ -48,6 +43,10 @@ install -d -m 0755 $RPM_BUILD_ROOT/opt/jboss
 
 # Add EAP to package
 cp -r ./%{jboss_version} $RPM_BUILD_ROOT/opt/jboss
+
+# Add EAP systemctl service file
+
+cp %SOURCE1 ./%{jboss_version}/bin/init.d
 
 # Make log and data dir's
 install -d -m 2750 $RPM_BUILD_ROOT%{jboss_home}/standalone/log
@@ -67,16 +66,9 @@ rm -rf $RPM_BUILD_ROOT
 # Add SSL directory to RPM
 %config(noreplace)/opt/jboss/vault
 
-#Adjust permissions
-%config(noreplace)%attr(2755, jboss,jboss) /etc/jboss-as
-%config(noreplace)%attr(2755, jboss,jboss) /var/log/jboss-as
-%config(noreplace)%attr(2775, jboss,jboss) /var/run/jboss-as
-
-
 %pre
 # Not in use
 useradd -M -s /sbin/nologin -c 'jboss process owener' jboss
-
 
 %post
 # Runs after the install
@@ -88,38 +80,31 @@ echo "JBOSS_CONFIG='"'standalone.xml -Djboss.bind.address=$HOSTNAME'"'" >> ${jbo
 echo 'JBOSSCONF=standalone'  >> ${jboss_home}/bin/init.d/jboss-as.conf
 echo 'JBOSS_HOME='${jboss_home}  >> ${jboss_home}/bin/init.d/jboss-as.conf
 
-# Initialize Startup Script
-ln -s ${jboss_home}/bin/init.d/jboss-as.conf /etc/jboss-as/
-ln -s ${jboss_home}/bin/init.d/jboss-as-standalone.sh /etc/init.d/jboss-as
+# Initialize Startup Script 
+cp %{jboss_version}/bin/init.d/jbosseap6.service /etc/systemd/system
+systemctl enable jbosseap6
 
-chkconfig --add jboss-as
 
 %preun
 # This stanza runs when the package is removed via yum 
 # Stop server
-service jboss-as stop
+systemctl stop jbosseap6
 
 # Wait for it
 sleep 10
 
-chkconfig --del jboss-as
+systemctl disable jbosseap6
 
 #remove jboss process owner
 userdel jboss
 
-/bin/unlink /etc/init.d/jboss-as.conf
-/bin/unlink /etc/init.d/jboss-as
+# remove service unit file
+rm 
 
 # Remove EAP
 /bin/rm -rf %{jboss_home}/
 
-/bin/rm -rf /etc/init.d/jboss-as
-
-/bin/rm -rf /var/log/jboss-as/
-
-/bin/rm -rf /var/run/jboss-as/
-
-/bin/rm -rf /etc/jboss-as
+/bin/rm -rf /etc/systemd/system/jbosseap6.service
 
 exit 0
 
