@@ -22,12 +22,13 @@
 
   - name: Install JBoss EAP
     yum: name=jboss-eap-6.4 state=present
-
+    notify:
+    - start eap
 #  - name: Deploy Hello World application
 #    copy: src= dest=
 #    - start eap
-i
-# handlers:
-#  - name: start eap
-#    service: name=jbosseap6 state=started
+
+  handlers:
+  - name: start eap
+    service: name=jbosseap6 state=started
 
