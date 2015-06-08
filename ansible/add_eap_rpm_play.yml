@@ -1,7 +1,9 @@
 ---
 - hosts: minion01.rhel7.labs
+
   remote_user: redhatter
   sudo: yes
+
   tasks:
   - name: Copy JBoss EAP RPM and repository folder
     copy: src=/mnt/ansible-puppet-workshop/support/myrepo dest=/opt/
@@ -21,4 +23,11 @@
   - name: Install JBoss EAP
     yum: name=jboss-eap-6.4 state=present
 
-#  - name: Deploy
+#  - name: Deploy Hello World application
+#    copy: src= dest=
+#    - start eap
+i
+# handlers:
+#  - name: start eap
+#    service: name=jbosseap6 state=started
+
