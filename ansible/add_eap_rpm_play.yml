@@ -5,13 +5,20 @@
   tasks:
   - name: Copy JBoss EAP RPM and repository folder
     copy: src=/mnt/ansible-puppet-workshop/support/myrepo dest=/opt/
+
   - name: Ensure createrepo is installed
     yum: name=createrepo state=present
+
   - name: Ensure yum-config-manager is installed
     yum: name=yum-utils state=present
+
   - name: Create repository for yum
     command: /usr/bin/createrepo --database /opt/myrepo 
+
   - name: Add JBoss EAP repository to yum
     command: /usr/bin/yum-config-manager --add-repo /opt/myrepo/jboss-repo.repo --enable 
+
   - name: Install JBoss EAP
     yum: name=jboss-eap-6.4 state=present
+
+#  - name: Deploy
