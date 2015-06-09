@@ -25,13 +25,13 @@
 
   - name: Install JBoss EAP
     yum: name=jboss-eap-6.4 state=present
+
+  - name: Deploy Hello World application
+    copy: 
+      src=/mnt/ansible-puppet-workshop/support/bin/helloworld-ansible/target/jboss-helloworld-ansible.war 
+      dest=/opt/jboss/jboss-eap-6.4/standalone/deployments
     notify:
     - start eap
-#  - name: Deploy Hello World application
-#    copy: 
-#      src=/mnt/ansible-puppet-workshop/support/bin/helloworld-ansible/target/jboss-helloworld-ansible.war 
-#      dest=/opt/jboss/jboss-eap-6.4/standalone/deployments
-#    - start eap
 
   handlers:
   - name: start eap
