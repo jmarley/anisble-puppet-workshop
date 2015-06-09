@@ -1,4 +1,0 @@
-[jboss-repo]
-name: jboss eap repository
-baseurl: file:///opt/myrepo/
-gpgcheck=0

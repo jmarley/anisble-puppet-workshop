@@ -5,8 +5,11 @@
   sudo: yes
 
   tasks:
-  - name: Copy JBoss EAP RPM and repository folder
-    copy: src=/mnt/ansible-puppet-workshop/support/myrepo dest=/opt/
+  - name: Copy JBoss EAP RPM 
+    copy: src=/mnt/ansible-puppet-workshop/support/rpmbuild/RPMS/x86_64/jboss-eap-6.4-1.0-1.el7.x86_64.rpm dest=/opt/myrepo/
+
+  - name: Copy jboss repo config file  
+    copy: src=/mnt/ansible-puppet-workshop/support/data/jboss-repo.repo dest=/opt/myrepo/
 
   - name: Ensure createrepo is installed
     yum: name=createrepo state=present
@@ -25,10 +28,12 @@
     notify:
     - start eap
 #  - name: Deploy Hello World application
-#    copy: src= dest=
+#    copy: 
+#      src=/mnt/ansible-puppet-workshop/support/bin/helloworld-ansible/target/jboss-helloworld-ansible.war 
+#      dest=/opt/jboss/jboss-eap-6.4/standalone/deployments
 #    - start eap
 
   handlers:
   - name: start eap
-    service: name=jbosseap6 state=started
+    service: name=jboss-standalone state=started
 
