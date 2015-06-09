@@ -35,5 +35,5 @@
 
   handlers:
   - name: start eap
-    service: name=jboss-standalone state=started
+    service: name=jboss-as-standalone state=started
 
