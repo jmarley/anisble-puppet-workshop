@@ -8,7 +8,7 @@ License: GPLv2+
 URL: http://www.irs.gov 
          
 Source0: jboss-eap-6.4.0.zip       
-Source1: jbosseap6.service       
+Source1: jboss-as-standalone.service       
 
 # jboss home variable
 %define jboss_version jboss-eap-6.4
@@ -22,7 +22,6 @@ Requires: unzip
 This rpm takes the EAP package from Red Hat in zip format and packages into an 
 rpm which is then installed in locations defined in spec.
 
-
 %prep
              	
 unzip %SOURCE0
@@ -32,12 +31,6 @@ unzip %SOURCE0
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-# Create initd Start/Stop directory
-#install -d $RPM_BUILD_ROOT/etc/jboss-as
-
-# Create log directory
-#install -d $RPM_BUILD_ROOT/var/log/jboss-as
 
 # Create SSL directory
 install -d -m 0755 $RPM_BUILD_ROOT/opt/jboss/vault 
@@ -72,70 +65,60 @@ rm -rf $RPM_BUILD_ROOT
 # Add SSL directory to RPM
 %config(noreplace)/opt/jboss/vault
 
-#Adjust permissions
-#%config(noreplace)%attr(2755, JbossAdm,JbossAdm) /etc/jboss-as
-#%config(noreplace)%attr(2775, jboss,jboss) /var/run/jboss-as
-#%config(noreplace)%attr(2775, jboss,jboss) /var/log/jboss-as
-
 %pre
 
 getent passwd %{user} > /dev/null 2&>1
 
 if [ $? -ne 0 ]; then
-	useradd -M -s /sbin/nologin -c 'jboss process owener' %{user}
+	useradd -r -u 400 -s /sbin/nologin -d %{jboss_home} -c 'jboss process owener' %{user}
 fi
 
 %post
 # Runs after the install
 
 # Configure jboss-as.conf
-echo 'JBOSS_CONSOLE_LOG=/dev/null' >> %{jboss_home}/bin/init.d/jboss-as.conf
+echo 'JBOSS_CONSOLE_LOG=/var/log/jboss-as/console.log' >> %{jboss_home}/bin/init.d/jboss-as.conf
 echo 'JBOSS_USER=jboss' >> %{jboss_home}/bin/init.d/jboss-as.conf
 echo "JBOSS_CONFIG='"'standalone.xml -Djboss.bind.address=$HOSTNAME'"'" >> %{jboss_home}/bin/init.d/jboss-as.conf
 echo 'JBOSSCONF=standalone'  >> %{jboss_home}/bin/init.d/jboss-as.conf
 echo 'JBOSS_HOME='%{jboss_home}  >> %{jboss_home}/bin/init.d/jboss-as.conf
 
 mkdir /etc/jboss-as
+mkdir /var/log/jboss-as
+mkdir /var/run/jboss-as
+
+chown -R jboss:jboss /var/log/jboss-as
+chown -R jboss:jboss /var/run/jboss-as
+
 cp %{jboss_home}/bin/init.d/jboss-as.conf /etc/jboss-as/
-cp %{jboss_home}/bin/init.d/jboss-as-standalone.sh /etc/init.d/jboss-standalone.sh
 
 # Initialize Startup Script 
-#cp %{jboss_home}/bin/init.d/jbosseap6.service /etc/systemd/system/
-#systemctl enable jbosseap6
+cp %{jboss_home}/bin/init.d/jboss-as-standalone.service /etc/systemd/system/
 
-# Initialize Startup Script
-#ln -s %{jboss_home}/bin/init.d/jboss-as.conf /etc/jboss-as/
-#ln -s %{jboss_home}/bin/init.d/jboss-as-standalone.sh /etc/init.d/jboss-standalone.sh
-
-chkconfig --add jboss-standalone.sh
+systemctl daemon-reload 
+systemctl enable jboss-as-standalone.service
 
 
 %preun
-# This stanza runs when the package is removed via yum 
 # Stop server
-#systemctl stop jbosseap6
-service jboss-standalone stop
+systemctl stop jboss-as-standalone.service
 
 # Wait for it
 sleep 10
 
-
 #systemctl disable jbosseap6
+systemctl disable jboss-as-standalone.service
 
 #remove jboss process owner
 userdel jboss
 
-chkconfig --del jboss-standalone 
-
 # Remove EAP
 /bin/rm -rf %{jboss_home}/
-
+/bin/rm -rf /etc/systemd/system/jboss-as-standalone.service
+/bin/rm -rf /etc/init.d/jboss-standalone.sh
 /bin/rm -rf /var/log/jboss-as/
-
 /bin/rm -rf /var/run/jboss-as/
-
-/bin/rm -rf /etc/jboss-as
-
+/bin/rm -rf /etc/jboss-as/
 exit 0
 
 %changelog
