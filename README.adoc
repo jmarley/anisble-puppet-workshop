@@ -54,10 +54,10 @@ $ ansible -i hosts add_eap_rpm_play.yml
 ----
 
 .verify anisble ran correctly
-[source,bash]
-----
-$ 
-----
+
+http://minion01.rhel7.labs:8080/jboss-helloworld-ansible - visit hellow world app deployed on my server!
+
+NOTE: my rhel server is minion01.rhel7.labs, but your server will be different
 
 .remove ansible configurations
 [source,bash]
