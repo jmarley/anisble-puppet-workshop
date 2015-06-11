@@ -50,7 +50,7 @@ $ rpmbuild --define "_topdir ${PWD}/support/rpmbuild" -ba ./support/rpmbuild/SPE
 
 [source,bash]
 ----
-$ ansible -i hosts add_eap_rpm_play.yml
+$ ansible -i hosts ./ansible-puppet-workshop/ansible/add_eap_rpm_play.yml
 ----
 
 .verify anisble ran correctly
@@ -66,4 +66,60 @@ $ ansible -i hosts rm_eap_rpm_play.yml
 ----
 
 == Puppet
+
+.puppet master configuration
+
+. Add environment path to puppet master
+[source,bash]
+----
+$ vim /etc/puppet/puppet.conf
+
+[main]
+   environmentpath = $confdir/environments:/opt/puppet/environments
+----
+
+. Mount projects environments folder
+
+[source,bash]
+----
+$ mkdir -p /opt/puppet/environments
+$ mount --bind <location-to-project>/ansible-puppet-workshop/puppet/environments /opt/puppet/environments
+----
+
+
+.install eap 6
+
+. On agent add install environment 
+
+[source,bash]
+----
+$  sudo vim /etc/puppet/puppet.conf
+[main]
+...
+...
+[agent]
+    environment = install
+----
+
+
+.verify puppet ran correctly
+
+http://minion01.rhel7.labs:8080/jboss-helloworld-puppet - visit hellow world app deployed on my server!
+
+NOTE: my rhel server is minion01.rhel7.labs, but your server will be different
+
+.remove eap 6
+
+. On agent add remove environment 
+
+[source,bash]
+----
+$  sudo vim /etc/puppet/puppet.conf
+[main]
+...
+...
+[agent]
+    environment = remove
+----
+
 
