@@ -22,13 +22,13 @@ image::ansible-puppet-workshop.png[title="configuration management workflow"]
 == The  RPM
 On the host machine download this project and then build the rpm and create the repository. We will then use this to push to the remote server for installation.
 
-. Download project
+* Download project
 
-. https://www.jboss.org/download-manager/file/jboss-eap-6.4.0.GA.zip[Download EAP]
+* https://www.jboss.org/download-manager/file/jboss-eap-6.4.0.GA.zip[Download EAP]
 
-. Add product to installs directory
+* Add product to installs directory
 
-. Create link to installs directory
+* Create link to installs directory
 
 [source,bash]
 ----
@@ -36,8 +36,7 @@ $ cd /<project-home>/ansible-puppet-workshop
 $ ln installs/jboss-eap-6.4.0.zip support/rpmbuild/SOURCES
 ----
 
-[start=5]
-. Build RPM
+* Build RPM
 
 [source, bash]
 ----
@@ -69,7 +68,7 @@ $ ansible -i hosts rm_eap_rpm_play.yml
 
 .puppet master configuration
 
-. Add environment path to puppet master
+* Add environment path to puppet master
 [source,bash]
 ----
 $ vim /etc/puppet/puppet.conf
@@ -78,7 +77,7 @@ $ vim /etc/puppet/puppet.conf
    environmentpath = $confdir/environments:/opt/puppet/environments
 ----
 
-. Mount projects environments folder
+* Mount projects environments folder
 
 [source,bash]
 ----
@@ -89,7 +88,7 @@ $ mount --bind <location-to-project>/ansible-puppet-workshop/puppet/environments
 
 .install eap 6
 
-. On agent add install environment 
+* On agent add install environment 
 
 [source,bash]
 ----
@@ -101,6 +100,12 @@ $  sudo vim /etc/puppet/puppet.conf
     environment = install
 ----
 
+* Run puppet configuration
+
+[source,bash]
+----
+$ sudo puppet agent --server=master.puppetlabs --no-daemonize --verbose --onetime
+----
 
 .verify puppet ran correctly
 
@@ -110,7 +115,7 @@ NOTE: my rhel server is minion01.rhel7.labs, but your server will be different
 
 .remove eap 6
 
-. On agent add remove environment 
+* On agent add remove environment 
 
 [source,bash]
 ----
@@ -122,4 +127,9 @@ $  sudo vim /etc/puppet/puppet.conf
     environment = remove
 ----
 
+* Run puppet configuration
 
+[source,bash]
+----
+$ sudo puppet agent --server=master.puppetlabs --no-daemonize --verbose --onetime
+----

@@ -1,6 +1,7 @@
 
 node 'minion01.rhel7.labs' {
 
-  include eap6
+  include install_eap6
+
 }
 

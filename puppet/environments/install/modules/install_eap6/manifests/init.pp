@@ -1,4 +1,4 @@
-class install {
+class install_eap6 {
 
   file { '/opt/myrepo/': ensure => directory }
 
