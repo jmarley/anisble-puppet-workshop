@@ -77,7 +77,7 @@ class install_eap6 {
 
   notify { "starting eap as a service": }->
 # start eap yum
-  service { "jboss-eap-6.4":
+  service { "jboss-as-standalone":
     ensure  => "running",
     require => Package["jboss-eap-6.4"],
   }->
